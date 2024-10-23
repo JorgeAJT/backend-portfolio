@@ -1,10 +1,14 @@
 def optimizing_list(list_of_dicts):
-    new_dict = {}
-    for dict in list_of_dicts:
-        key = "".join(dict.keys())
-        value = "".join(dict.values())
-        if key[:1] == "n":
-            new_dict[key[6:9]] = value
+    new_dict = {
+        "181": [],
+        "182": [],
+        "183": []
+    }
+    for user in list_of_dicts:
+        key = "".join(user.keys())
+        value = list(user.values())
+        new_dict[key[-3:]].append(value[0])
+
     return new_dict
 
 
