@@ -1,7 +1,6 @@
 import psycopg2
 import logging
 
-
 def database_connection() -> psycopg2.extensions.connection:
     logging.info("Connecting with the db ...")
 
