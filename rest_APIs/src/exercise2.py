@@ -27,7 +27,7 @@ try:
                 mandate_data.row_update_datetime, mandate_data.row_create_datetime,
                 mandate_data.changed_by, mandate_data.collection_type, mandate_data.metering_consent
             ))
-            conn.commit
+            conn.commit()
             return {"status_code": 200,
                     "body": {"message": f"Request {mandate_data.mandate_id} was created successfully"}}
         except Exception as e:
