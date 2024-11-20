@@ -28,7 +28,7 @@ try:
                 mandate_data.changed_by, mandate_data.collection_type, mandate_data.metering_consent
             ))
             conn.commit()
-            return {"status_code": 200,
+            return {"status_code": 201,
                     "body": {"message": f"Request {mandate_data.mandate_id} was created successfully"}}
         except Exception as e:
             logging.error(f"Error executing query: {e}")
