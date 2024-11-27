@@ -1,13 +1,15 @@
 import psycopg2
-import logging
+from logger import setup_logger
+
+logger = setup_logger("database")
 
 def database_connection() -> psycopg2.extensions.connection:
-    logging.info("Connecting with the db ...")
+    logger.info("Connecting with the db ...")
 
     conn = psycopg2.connect(
         dbname='postgres',
         user='postgres',
         password='1234',
     )
-    logging.info("Successful connection!")
+    logger.info("Successful connection!")
     return conn

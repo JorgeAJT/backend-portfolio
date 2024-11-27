@@ -1,10 +1,10 @@
 import uvicorn
-import logging
 from fastapi import FastAPI
-from rest_APIs.src.database_connection import database_connection
+from logger import setup_logger
+from database_connection import database_connection
 from models.response_model import Response
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = setup_logger("meter_data")
 
 try:
     conn = database_connection()
@@ -18,7 +18,7 @@ try:
             cursor.execute("SELECT * FROM meter_data WHERE meter_data_id = %s", (meter_data_id,))
             value = cursor.fetchone()
         except Exception as e:
-            logging.error(f"Error executing query: {e}")
+            logger.error(f"Error executing query: {e}")
             value = None
         finally:
             cursor.close()
@@ -35,7 +35,7 @@ try:
             cursor.execute("SELECT * FROM meter_data WHERE business_partner_id = %s", (business_partner_id,))
             value = cursor.fetchmany(2)
         except Exception as e:
-            logging.error(f"Error executing query: {e}")
+            logger.error(f"Error executing query: {e}")
             value = None
         finally:
             cursor.close()
@@ -49,5 +49,5 @@ try:
         uvicorn.run(app, port=8080)
 
 except Exception as e:
-    logging.error(f"Error: {e}")
+    logger.error(f"Error: {e}")
     raise e
