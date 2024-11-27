@@ -3,4 +3,4 @@ from typing import Dict, Any
 
 class Response(BaseModel):
     status_code: int
-    message: Dict[str, Any]
+    message: dict | str
