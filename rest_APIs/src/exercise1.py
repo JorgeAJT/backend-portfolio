@@ -1,9 +1,9 @@
 import uvicorn
-import logging
 from fastapi import FastAPI
+from logger import setup_logger
 from rest_APIs.src.database_connection import database_connection
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = setup_logger("general_data")
 
 try:
     conn = database_connection()
@@ -17,7 +17,7 @@ try:
             cursor.execute("SELECT * FROM meter_data WHERE meter_data_id = %s", (meter_data_id,))
             value = cursor.fetchone()
         except Exception as e:
-            logging.error(f"Error executing query: {e}")
+            logger.error(f"Error executing query: {e}")
             value = None
         finally:
             cursor.close()
@@ -34,7 +34,7 @@ try:
             cursor.execute("SELECT * FROM meter_data WHERE connection_ean_code = %s AND business_partner_id = %s", (connection_ean_code,business_partner_id))
             value = cursor.fetchone()
         except Exception as e:
-            logging.error(f"Error executing query: {e}")
+            logger.error(f"Error executing query: {e}")
             value = None
         finally:
             cursor.close()
@@ -51,7 +51,7 @@ try:
             cursor.execute("SELECT * FROM mandate_data WHERE mandate_id = %s", (mandate_id,))
             value = cursor.fetchone()
         except Exception as e:
-            logging.error(f"Error executing query: {e}")
+            logger.error(f"Error executing query: {e}")
             value = None
         finally:
             cursor.close()
@@ -68,7 +68,7 @@ try:
             cursor.execute("SELECT * FROM mandate_data WHERE business_partner_id = %s AND mandate_status = %s", (business_partner_id,mandate_status))
             value = cursor.fetchone()
         except Exception as e:
-            logging.error(f"Error executing query: {e}")
+            logger.error(f"Error executing query: {e}")
             value = None
         finally:
             cursor.close()
@@ -85,7 +85,7 @@ try:
             cursor.execute("SELECT * FROM meter_readings WHERE meter_number = %s AND account_id = %s AND energy_type = %s", (meter_number, account_id, energy_type))
             value = cursor.fetchone()
         except Exception as e:
-            logging.error(f"Error executing query: {e}")
+            logger.error(f"Error executing query: {e}")
             value = None
         finally:
             cursor.close()
@@ -99,5 +99,5 @@ try:
         uvicorn.run(app, port=8080)
 
 except Exception as e:
-    logging.error(f"Error: {e}")
+    logger.error(f"Error: {e}")
     raise e
