@@ -1,16 +1,14 @@
-import uvicorn
-from fastapi import FastAPI
-from logger import setup_logger
-from rest_APIs.src.database_connection import database_connection
+from fastapi import APIRouter
+from rest_APIs.src.utils import setup_logger, database_connection
 
-logger = setup_logger("general_data")
+logger = setup_logger("general-data")
 
 try:
     conn = database_connection()
 
-    app = FastAPI()
+    general_data_router = APIRouter()
 
-    @app.get('/meter_data/{meter_data_id}')
+    @general_data_router.get('/meter_data/{meter_data_id}')
     async def get_meter_data_by_id(meter_data_id: int):
         cursor = conn.cursor()
         try:
@@ -27,7 +25,7 @@ try:
         else:
             return {"status_code": 404, "body": {"message": "meter_data not found"}}
 
-    @app.get('/meter_data/')
+    @general_data_router.get('/meter_data/')
     async def get_meter_data_by_query_params(connection_ean_code: str, business_partner_id: str):
         cursor = conn.cursor()
         try:
@@ -44,7 +42,7 @@ try:
         else:
             return {"status_code": 404, "body": {"message": "meter_data not found"}}
 
-    @app.get('/mandate_data/{mandate_id}')
+    @general_data_router.get('/mandate_data/{mandate_id}')
     async def get_mandate_data_by_id(mandate_id: int):
         cursor = conn.cursor()
         try:
@@ -61,7 +59,7 @@ try:
         else:
             return {"status_code": 404, "body": {"message": "mandate_data not found"}}
 
-    @app.get('/mandate_data/')
+    @general_data_router.get('/mandate_data/')
     async def get_mandate_data_by_query_params(business_partner_id: str, mandate_status: str):
         cursor = conn.cursor()
         try:
@@ -78,7 +76,7 @@ try:
         else:
             return {"status_code": 404, "body": {"message": "mandate_data not found"}}
 
-    @app.get('/meter_readings/')
+    @general_data_router.get('/meter_readings/')
     async def get_meter_reading_by_query_params(meter_number: str, account_id: str, energy_type: str):
         cursor = conn.cursor()
         try:
@@ -94,9 +92,6 @@ try:
             return {"status_code": 200, "body": {"message": "Returning meter_readings row", "meter_reading": value}}
         else:
             return {"status_code": 404, "body": {"message": "meter_reading not found"}}
-
-    if __name__ == "__main__":
-        uvicorn.run(app, port=8080)
 
 except Exception as e:
     logger.error(f"Error: {e}")

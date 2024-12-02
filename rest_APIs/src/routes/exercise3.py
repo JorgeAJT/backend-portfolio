@@ -1,10 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 from psycopg2.extras import RealDictCursor
-from logger import setup_logger
-from database_connection import database_connection
-from models.response_model import Response
-from models.meter_data_model import MeterDataResponse
+from utils import setup_logger, database_connection
+from models import MeterDataResponse, Response
 
 logger = setup_logger("meter_data")
 

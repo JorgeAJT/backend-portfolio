@@ -1,10 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 from psycopg2.extras import RealDictCursor
-from logger import setup_logger
-from database_connection import database_connection
-from models.mandate_data_model import MandateData
-from models.response_model import Response
+from rest_APIs.src.utils import setup_logger, database_connection
+from rest_APIs.src.models import MandateData, Response
 
 logger = setup_logger("mandate_data")
 
