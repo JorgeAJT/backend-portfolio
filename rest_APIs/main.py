@@ -1,6 +1,6 @@
+import uvicorn
 from fastapi import FastAPI
 from rest_APIs.src import api_router
-import uvicorn
 
 app = FastAPI(
     title="Practice"

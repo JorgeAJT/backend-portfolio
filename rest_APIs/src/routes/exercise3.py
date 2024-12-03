@@ -1,17 +1,16 @@
-import uvicorn
-from fastapi import FastAPI
+from fastapi import APIRouter
 from psycopg2.extras import RealDictCursor
-from utils import setup_logger, database_connection
-from models import MeterDataResponse, Response
+from rest_APIs.src.utils import setup_logger, database_connection
+from rest_APIs.src.models import MeterDataResponse, Response
 
-logger = setup_logger("meter_data")
+logger = setup_logger("meter-data")
 
 try:
     conn = database_connection()
 
-    app = FastAPI()
+    meter_data_router = APIRouter()
 
-    @app.get('/meter_data/{meter_data_id}', response_model=Response)
+    @meter_data_router.get('/meter_data/{meter_data_id}', response_model=Response)
     async def get_meter_data_by_id(meter_data_id: int):
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         try:
@@ -29,7 +28,7 @@ try:
         else:
             return Response(status_code=404, message="meter_data row not found")
 
-    @app.get('/meter_data/', response_model=Response)
+    @meter_data_router.get('/meter_data/', response_model=Response)
     async def get_meter_data_by_query_params(business_partner_id: str):
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         try:
@@ -45,9 +44,6 @@ try:
             return Response(status_code=200, message={"meter_data": values})
         else:
             return Response(status_code=404, message="meter_data row not found")
-
-    if __name__ == "__main__":
-        uvicorn.run(app, port=8080)
 
 except Exception as e:
     logger.error(f"Error: {e}")
