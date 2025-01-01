@@ -44,8 +44,7 @@ try:
             cursor.close()
 
         if value:
-            mandate_data = MandateData(**value)
-            return Response(status_code=200, message={"mandate_data": mandate_data.dict()})
+            return Response(status_code=200, message={"mandate_data": value})
         else:
             return Response(status_code=404, message="mandate_data row not found")
 
@@ -63,8 +62,7 @@ try:
             cursor.close()
 
         if value:
-            mandate_data = MandateData(**value)
-            return Response(status_code=200, message={"mandate_data": mandate_data.dict()})
+            return Response(status_code=200, message={"mandate_data": value})
         else:
             return Response(status_code=404, message="mandate_data row not found")
 

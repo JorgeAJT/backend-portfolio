@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from psycopg2.extras import RealDictCursor
 from rest_APIs.src.utils import setup_logger, database_connection
-from rest_APIs.src.models import MeterDataResponse, Response
+from rest_APIs.src.models import Response
 
 logger = setup_logger("meter-data")
 
@@ -23,8 +23,7 @@ try:
             cursor.close()
 
         if value:
-            meter_data = MeterDataResponse(**value)
-            return Response(status_code=200, message={"meter_data": meter_data.dict()})
+            return Response(status_code=200, message={"meter_data": value})
         else:
             return Response(status_code=404, message="meter_data row not found")
 
