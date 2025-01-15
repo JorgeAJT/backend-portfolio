@@ -1,6 +1,5 @@
-
 def myname(name: str) -> str:
-    if name:
+    if isinstance(name, str):
         new_name = ""
         for letter in name:
             if letter != " " and letter != "-" and letter != "_":
