@@ -3,6 +3,7 @@ import psycopg2
 
 def db_connection() -> psycopg2.extensions.connection:
     print("Connecting with the db ...")
+
     conn = psycopg2.connect(
         dbname='postgres',
         user='postgres',

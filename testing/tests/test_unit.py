@@ -1,7 +1,7 @@
 import pytest
 import json
 from testing.src import myname
-from testing.src.router import get_names
+from testing.src.router import get_names, get_mandate_data
 
 
 def test_myname():
@@ -74,3 +74,4 @@ async def test_get_names(mocker): # mocker is a fixture to create simulated obje
     # Asserts
     assert response.status_code == 200
     assert response_json == {"message": fake_rows}
+
