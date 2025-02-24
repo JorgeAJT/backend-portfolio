@@ -14,10 +14,13 @@ async def get_say_hello() -> JSONResponse:
 
 @router.get("/names/")
 async def get_names() -> JSONResponse:
-    with db_connection() as pg_conn:
-        with pg_conn.cursor(cursor_factory=DictCursor) as cursor:
-            cursor.execute("SELECT * FROM integration_test")
-            records = cursor.fetchall()
+    conn = db_connection()
+    cursor = conn.cursor(cursor_factory=DictCursor)
+    cursor.execute("SELECT * FROM integration_test")
+    records = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
 
     return JSONResponse(content={"message": records}, status_code=200)
 
