@@ -75,3 +75,43 @@ async def test_get_names(mocker): # mocker is a fixture to create simulated obje
     assert response.status_code == 200
     assert response_json == {"message": fake_rows}
 
+@pytest.mark.asyncio
+async def test_get_mandate_data(mocker):
+
+    fake_row =  [
+        {
+            "mandate_id": 2,
+            "business_partner_id": "0101879132",
+            "brand": "ES",
+            "mandate_status": "Y",
+            "collection_frequency": "D",
+            "row_update_datetime": "2024-04-23T13:05:14",
+            "row_create_datetime": "2019-07-04T10:00:00",
+            "changed_by": "SYSTEM",
+            "collection_type": "P4",
+            "metering_consent": "daily_insight"
+        }
+    ]
+
+    mock_cursor = mocker.MagicMock()
+    mock_cursor.fetchall.return_value = fake_row
+
+    mock_db = mocker.MagicMock()
+    mock_db.__enter__.return_value = mock_db
+    mock_db.cursor.return_value.__enter__.return_value = mock_cursor
+
+    mocker.patch("testing.src.router.db_connection", return_value=mock_db)
+
+    response = await get_mandate_data(2)
+
+    response_json = json.loads(response.body)
+
+    mock_cursor.execute.assert_called_once_with('SELECT * FROM mandate_data WHERE mandate_id = %s', (2,))
+
+    assert response.status_code == 200
+    assert response_json == {"mandate_data": fake_row}
+
+
+
+
+
