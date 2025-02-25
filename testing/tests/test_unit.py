@@ -38,33 +38,37 @@ def test_myname_dictionary():
 @pytest.mark.asyncio
 async def test_get_names(mocker):
 
-    fake_rows = [
+    # Given
+    mock_db = mocker.MagicMock()
+
+    mock_cursor = mocker.MagicMock()
+    mock_db.cursor.return_value = mock_cursor
+
+    mocker.patch("testing.src.router.db_connection", return_value=mock_db)
+
+    expected_row = [
         ["Jorge", 34],
         ["David", 25],
         ["Dani", 28],
         ["Paquito", 47]
     ]
 
-    mock_cursor = mocker.MagicMock()
-    mock_cursor.fetchall.return_value = fake_rows
+    mock_cursor.fetchall.return_value = expected_row
 
-    mock_db = mocker.MagicMock()
-    mock_db.cursor.return_value = mock_cursor
-
-    mocker.patch("testing.src.router.db_connection", return_value=mock_db)
-
+    # When
     response = await get_names()
     response_json = json.loads(response.body)
 
     mock_cursor.execute.assert_called_once_with("SELECT * FROM integration_test")
 
+    # Then
     assert response.status_code == 200
-    assert response_json == {"message": fake_rows}
+    assert response_json == {"message": expected_row}
 
 @pytest.mark.asyncio # This decorator says that the function is async
 async def test_get_mandate_data(mocker): # mocker is a fixture to create simulated objects and patches
 
-    fake_row =  [
+    fake_row = [
         {
             "mandate_id": 2,
             "business_partner_id": "0101879132",
@@ -97,13 +101,14 @@ async def test_get_mandate_data(mocker): # mocker is a fixture to create simulat
     # Every time db_connection() is called, use mock_db instead of the real connection
     mocker.patch("testing.src.router.db_connection", return_value=mock_db)
 
-    response = await get_mandate_data(2)
+    mandate_id = 2
+    response = await get_mandate_data(mandate_id)
 
     # Used this because the method .json() is not available in lastest versions of starlette fastapi
     response_json = json.loads(response.body)
 
     # It's a check of what happened in get_names()
-    mock_cursor.execute.assert_called_once_with('SELECT * FROM mandate_data WHERE mandate_id = %s', (2,))
+    mock_cursor.execute.assert_called_once_with('SELECT * FROM mandate_data WHERE mandate_id = %s', (mandate_id,))
 
     # Asserts
     assert response.status_code == 200

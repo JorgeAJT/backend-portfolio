@@ -27,8 +27,8 @@ async def get_names() -> JSONResponse:
 
 @router.get('/mandate_data/')
 async def get_mandate_data(mandate_id: int) -> JSONResponse:
-    with db_connection() as pg_conn:
-        with pg_conn.cursor(cursor_factory=RealDictCursor) as cursor:
+    with db_connection() as connection:
+        with connection.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute('SELECT * FROM mandate_data WHERE mandate_id = %s', (mandate_id,))
             records = cursor.fetchall()
 
