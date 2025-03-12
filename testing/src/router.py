@@ -25,14 +25,18 @@ async def get_names() -> JSONResponse:
     return JSONResponse(content={"message": records}, status_code=200)
 
 
-@router.get('/mandate_data/')
+@router.get("/mandate_data/")
 async def get_mandate_data(mandate_id: int) -> JSONResponse:
     with db_connection() as connection:
         with connection.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute('SELECT * FROM mandate_data WHERE mandate_id = %s', (mandate_id,))
+            cursor.execute(
+                "SELECT * FROM mandate_data WHERE mandate_id = %s",
+                (mandate_id,)
+            )
             records = cursor.fetchall()
 
-            # jsonable_encoder to convert complex structures like datetimes in other structures compatible with JSON
+            # jsonable_encoder to convert complex structures like datetimes
+            # in other structures compatible with JSON
             encoded_data = jsonable_encoder({"mandate_data": records})
 
     return JSONResponse(content=encoded_data, status_code=200)

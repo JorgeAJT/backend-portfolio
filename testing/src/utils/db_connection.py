@@ -14,7 +14,7 @@ def db_connection() -> psycopg2.extensions.connection:
         user=os.environ.get("user", "postgres"),
         password=os.environ.get("password", "1234"),
         host=os.environ.get("host", "127.0.0.1"),
-        port=5432
+        port=5432,
     )
 
     logger.info("Successful connection!")

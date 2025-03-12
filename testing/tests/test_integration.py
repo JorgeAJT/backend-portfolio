@@ -35,3 +35,23 @@ def test_get_names(environmental_variables: bool, test_client: TestClient):
     assert response.status_code == 200
     assert response.json() is not None
     assert response.json() == {"message": expected_row}
+
+def test_get_mandate_data(environmental_variables: bool, test_client: TestClient):
+    expected_row = [
+        {
+            "mandate_id": 2,
+            "business_partner_id": "0101879132",
+            "brand": "ES",
+            "mandate_status": "Y",
+            "collection_frequency": "D",
+            "row_update_datetime": "2024-04-23T13:05:14",
+            "row_create_datetime": "2019-07-04T10:00:00",
+            "changed_by": "SYSTEM",
+            "collection_type": "P4",
+            "metering_consent": "daily_insight"
+        }
+    ]
+    response = test_client.get("/mandate_data/", params={"mandate_id": 2})
+    assert response.status_code == 200
+    assert response.json() is not None
+    assert response.json() == {"mandate_data": expected_row}
