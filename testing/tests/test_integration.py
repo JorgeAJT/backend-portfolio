@@ -13,6 +13,7 @@ def environmental_variables():
 
     return True
 
+
 @fixture
 def test_client():
     return TestClient(router, "http://127.0.0.1:8080")
@@ -35,6 +36,7 @@ def test_get_names(environmental_variables: bool, test_client: TestClient):
     assert response.status_code == 200
     assert response.json() is not None
     assert response.json() == {"message": expected_row}
+
 
 def test_get_mandate_data(environmental_variables: bool, test_client: TestClient):
     expected_row = [

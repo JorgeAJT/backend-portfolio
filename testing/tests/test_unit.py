@@ -40,7 +40,6 @@ async def test_get_names(mocker):
 
     # Given
     mock_db = mocker.MagicMock()
-
     mock_cursor = mocker.MagicMock()
     mock_db.cursor.return_value = mock_cursor
 
@@ -64,6 +63,7 @@ async def test_get_names(mocker):
     # Then
     assert response.status_code == 200
     assert response_json == {"message": expected_row}
+
 
 @pytest.mark.asyncio # This decorator says that the function is async
 async def test_get_mandate_data(mocker): # mocker is a fixture to create simulated objects and patches
@@ -95,7 +95,7 @@ async def test_get_mandate_data(mocker): # mocker is a fixture to create simulat
     # "with" behavior is imitated here doing __enter__() returning us the same connection in the same variable
     mock_db.__enter__.return_value = mock_db
 
-    # mock_db.cursor.return_value is the object which is made when your code executes pg_conn.cursor()
+    # mock_db.cursor.return_value is the object which is made when your code executes connection.cursor()
     mock_db.cursor.return_value.__enter__.return_value = mock_cursor
 
     # Every time db_connection() is called, use mock_db instead of the real connection
@@ -107,7 +107,7 @@ async def test_get_mandate_data(mocker): # mocker is a fixture to create simulat
     # Used this because the method .json() is not available in lastest versions of starlette fastapi
     response_json = json.loads(response.body)
 
-    # It's a check of what happened in get_names()
+    # It's a check of what happened in get_mandate_data()
     mock_cursor.execute.assert_called_once_with('SELECT * FROM mandate_data WHERE mandate_id = %s', (mandate_id,))
 
     # Asserts
