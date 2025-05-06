@@ -1,0 +1,23 @@
+services:
+  api:
+    image: jorgeajt/shipping-hello-there-repository:1.0
+    ports:
+      - "8080:8080"
+    networks:
+      - front-tier
+      - back-tier
+    depends_on:
+      - database
+
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - "5432:5432"
+    networks:
+      - back-tier
+
+networks:
+  front-tier: {}
+  back-tier: {}
